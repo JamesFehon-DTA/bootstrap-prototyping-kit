@@ -1,4 +1,37 @@
 // src/scss/_variables.scss
+//
+// Corrected against actual CivicTheme UIKit source (newer release):
+//   _variables_base.scss   (483 lines — particle, colours, typography, grid)
+//   _variables_components.scss (1395 lines — 1047 component variables)
+//
+// CivicTheme architecture reference:
+//   $ct-particle: 8px (base unit)
+//   ct-particle(n) → n × 8px in rem (n × 0.5rem)
+//   ct-spacing(n)  → n × $ct-particle
+//   $ct-font-base-size: ct-particle-px(2) = 16px
+//   $ct-font-base-line-height: $ct-font-base-size = 16px
+//     (NOT 24px — line-heights are per-tuple multipliers of this base)
+//   Typography tuples: (size, line-height, weight, font-kind, letter-spacing)
+//     with breakpoint keys 'xxs' (mobile) and 'm' (desktop)
+//   $ct-animation-duration: 0.25s (base transition timing)
+//
+// Default starter-kit brand colours:
+//   Light — brand1: #00698f, brand2: #e6e9eb, brand3: #121313
+//   Dark  — brand1: #61daff, brand2: #003a4f, brand3: #00698f
+//
+// Place this file before `@import "bootstrap/scss/bootstrap";`
+//
+// Choose ONE tier: Tier 1, Tier 1+2, or Tier 1+2+3.
+// Each tier is additive.
+// ==========================================================================
+
+
+// ==========================================================================
+// TIER 1 — MINIMAL (~15 variables, ~80% visual shift)
+//
+// Gets you: CivicTheme typeface, teal primary, correct status colours,
+// border-radius scale, heading and body text colours.
+// ==========================================================================
 
 // Typography
 $font-family-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -9,30 +42,423 @@ $font-family-base:       $font-family-sans-serif;
 // $font-family-sans-serif: "Inter", sans-serif;
 
 
-// -- Theme colours -------------------------------------------
-// CivicTheme light-theme brand colours mapped to Bootstrap
-$primary:   #00698f;  // brand1 — teal
-$secondary: #e6e9eb;  // brand2 — cool grey
-$dark:      #121313;  // brand3 — near-black
-$light:     #fafbfb;  // background-light (tint of brand2)
-$success:   #008a00;
-$danger:    #cc2936;
-$warning:   #b85c00;
-$info:      #00698f;
+// -- Theme colours --------------------------------------------------------
+// Mapped from $ct-colors-default light theme.
+// Derived values are approximations of ct-color-shade/ct-color-tint output
+// against brand1=#00698f, brand2=#e6e9eb, brand3=#121313.
+$primary:   #00698f;   // brand1 (interaction-background)
+$secondary: #e6e9eb;   // brand2 (background)
+$dark:      #121313;   // brand3 (highlight)
+$light:     #fafbfb;   // ≈ tint(brand2, 90) → background-light
+
+// Status colours — from source, NOT Bootstrap-like greens/reds.
+$success:   #008482;   // teal-green (not #008a00)
+$danger:    #ce3836;   // (not #cc2936)
+$warning:   #c95100;   // (not #b85c00)
+$info:      #007cbf;   // distinct blue (not brand1)
 
 $body-bg:    #ffffff;
-$body-color: #2d3e45;  // derived body-text colour
+$body-color: #2d3e45;  // ≈ tint(shade(brand1, 80), 20) → body text
 
-// -- Links ---------------------------------------------------
+// -- Links ----------------------------------------------------------------
 $link-color:      $primary;
 $link-decoration: underline;
 
-// -- Border radius -------------------------------------------
-// CivicTheme uses subtle rounding aligned to its 4 px grid
-$border-radius:    0.25rem;  // 4 px
-$border-radius-sm: 0.125rem; // 2 px
-$border-radius-lg: 0.5rem;   // 8 px
+// -- Border radius --------------------------------------------------------
+// $ct-border-radius: ct-particle(0.5) = 4px = 0.25rem
+$border-radius:    0.25rem;  // 4px
+$border-radius-sm: 0.125rem; // 2px
+$border-radius-lg: 0.5rem;   // 8px
 
-// -- Headings ------------------------------------------------
-$headings-font-weight: 700;
-$headings-color:       #002a39;  // derived heading colour
+// -- Headings -------------------------------------------------------------
+$headings-font-weight: 700;  // 'bold' in all typography tuples
+$headings-color:       #002a39; // ≈ shade(brand1, 60) → heading colour
+
+
+// ==========================================================================
+// TIER 2 — PARTWAY (~55 variables, component-level fidelity)
+//
+// Adds: corrected heading scale, responsive line-heights, 8px spacing grid,
+// button/form/card tuning, shadows from actual elevation tokens, focus ring.
+// ==========================================================================
+
+// -- Typography scale -----------------------------------------------------
+// Desktop ('m' breakpoint) values from $ct-typography-default.
+// $ct-font-base-line-height = 16px (same as base-size, NOT 24px).
+// Line-heights below are the tuple multiplier × 16px, converted to unitless
+// ratios against the font-size.
+$font-size-base: 1rem;        // 16px
+$font-size-sm:   0.875rem;    // 14px — text-small desktop
+$font-size-lg:   1.25rem;     // 20px — text-large desktop
+$line-height-base: 1.75;      // text-regular desktop: 28px / 16px
+$line-height-sm:   1.714;     // text-small: 24px / 14px
+$line-height-lg:   1.7;       // text-large: 34px / 20px
+
+// Heading sizes — desktop ('m') breakpoint values:
+//   heading-1: 3   × 16 = 48px,  lh: 3.75 × 16 = 60px
+//   heading-2: 2.5 × 16 = 40px,  lh: 3    × 16 = 48px  (NOT 36px)
+//   heading-3: 2   × 16 = 32px,  lh: 2.5  × 16 = 40px  (NOT 28px)
+//   heading-4: 1.5 × 16 = 24px,  lh: 2    × 16 = 32px
+//   heading-5: 1.25× 16 = 20px,  lh: 1.5  × 16 = 24px
+//   heading-6: 1   × 16 = 16px,  lh: 1.625× 16 = 26px  (not responsive)
+$h1-font-size: 3rem;      // 48px
+$h2-font-size: 2.5rem;    // 40px — corrected from 2.25rem
+$h3-font-size: 2rem;      // 32px — corrected from 1.75rem
+$h4-font-size: 1.5rem;    // 24px
+$h5-font-size: 1.25rem;   // 20px
+$h6-font-size: 1rem;      // 16px
+
+$headings-line-height:   1.25;   // approximate across levels
+$headings-margin-bottom: 0.75rem;
+
+$display-font-sizes: (
+  1: 3.5rem,   // 56px — display desktop: 3.5 × base
+  2: 3rem,     // 48px
+  3: 2.5rem,   // 40px
+  4: 2rem,     // 32px
+  5: 1.75rem,  // 28px
+  6: 1.5rem,   // 24px
+);
+$display-font-weight: 700;
+
+$lead-font-size:   1.5rem;   // text-extra-large desktop: 1.5 × base
+$lead-font-weight: 400;      // 'regular'
+$small-font-size:  0.875em;
+$paragraph-margin-bottom: 1rem;
+
+// -- Spacing scale --------------------------------------------------------
+// CivicTheme: $ct-particle = 8px, ct-spacing(n) = n × 8px.
+// Bootstrap spacer map keyed 0–5.
+$spacer: 1rem; // 16px = 2 particles
+$spacers: (
+  0: 0,
+  1: 0.5rem,     //  8px = 1 particle  — ct-spacing(1)
+  2: 1rem,        // 16px = 2 particles — ct-spacing(2)
+  3: 1.5rem,      // 24px = 3 particles — ct-spacing(3)
+  4: 2rem,        // 32px = 4 particles — ct-spacing(4)
+  5: 3rem,        // 48px = 6 particles — ct-spacing(6)
+);
+
+// -- Component active states ----------------------------------------------
+$component-active-color: #fafafa; // ≈ interaction-text (tint brand2 80%)
+$component-active-bg:    $primary;
+
+// -- Focus ring -----------------------------------------------------------
+// CivicTheme uses interaction-focus: #8b5cd7 (purple), NOT teal.
+// $ct-outline-width: ct-particle(0.375) = 3px, offset: 0.
+// Bootstrap 5.2 doesn't have a single focus-ring variable, but we can
+// set the input focus shadow to approximate it.
+$input-btn-focus-width:  0.1875rem; // 3px — ct-outline-width
+$input-btn-focus-color:  rgba(#8b5cd7, 0.5); // purple focus
+$input-btn-focus-box-shadow: 0 0 0 $input-btn-focus-width $input-btn-focus-color;
+
+// -- Buttons --------------------------------------------------------------
+// $ct-button-border-width: ct-particle(0.25) = 2px.
+// No explicit padding variables in source — sizing handled in component SCSS.
+// Button font-weight not tokenised; buttons use label typography = 'semibold'.
+$btn-font-weight:    600;      // semibold — label typography weight
+$btn-border-width:   2px;      // ct-particle(0.25)
+$btn-border-radius:  $border-radius;
+$btn-padding-y:      0.625rem; // 10px — estimated from component output
+$btn-padding-x:      1.5rem;   // 24px
+$btn-font-size:      1rem;
+$btn-line-height:    1.25;     // label-regular line-height
+
+$btn-padding-y-sm:    0.375rem;
+$btn-padding-x-sm:    1rem;
+$btn-border-radius-sm: $border-radius-sm;
+
+$btn-padding-y-lg:    0.75rem;
+$btn-padding-x-lg:    2rem;
+$btn-border-radius-lg: $border-radius-lg;
+
+$btn-transition: color 0.25s ease-in-out,
+                 background-color 0.25s ease-in-out,
+                 border-color 0.25s ease-in-out,
+                 box-shadow 0.25s ease-in-out; // $ct-button-animation-duration
+
+// -- Forms ----------------------------------------------------------------
+// From $ct-input-* variables in _variables_components.scss.
+$input-padding-y:          0.625rem;   // 10px
+$input-padding-x:          0.75rem;    // 12px
+$input-font-size:          1rem;
+$input-font-weight:        400;
+$input-line-height:        1.75;       // matches text-regular
+$input-bg:                 #fafbfb;    // ct-color-light('background-light')
+$input-color:              $body-color;
+$input-border-color:       #5e6a71;    // ≈ shade(brand2, 60) → 'border'
+$input-border-width:       1px;
+$input-border-radius:      $border-radius; // $ct-input-border-radius
+$input-focus-border-color: $primary;       // ct-color-light('interaction-background')
+$input-focus-box-shadow:   $input-btn-focus-box-shadow; // purple focus ring
+$input-placeholder-color:  #5a6872;    // muted text
+
+$form-label-margin-bottom: 0.5rem;
+$form-label-font-size:     1rem;       // label-regular size
+$form-label-font-weight:   600;        // semibold
+
+$form-check-input-border:       1px solid #5e6a71;
+$form-check-input-border-radius: $border-radius;
+
+// -- Cards ----------------------------------------------------------------
+// CivicTheme cards use elevation shadows, not borders.
+// Background: ct-color-light('background-light') = near-white.
+$card-spacer-y:      1.25rem;
+$card-spacer-x:      1.25rem;
+$card-border-width:  0;
+$card-border-radius: $border-radius; // 4px (not 8px — $ct-border-radius)
+$card-border-color:  transparent;
+$card-cap-padding-y: 1rem;
+$card-cap-padding-x: 1.25rem;
+$card-cap-bg:        transparent;
+$card-bg:            #fafbfb;  // background-light
+
+// -- Shadows --------------------------------------------------------------
+// From $ct-elevations — single-layer, HIGH opacity (20–25%).
+// Elevation 1: 0 ct-particle(0.25) ct-particle(1) rgba(0,0,0,25%)
+//            = 0 2px 8px rgba(0,0,0,0.25)
+// Elevation 2: 0 4px 16px rgba(0,0,0,0.20)
+// Elevation 3: 0 8px 24px rgba(0,0,0,0.20)
+// Elevation 4: 0 16px 64px rgba(0,0,0,0.20)
+$box-shadow:       0 0.125rem 0.5rem rgba(0, 0, 0, 0.25);    // elevation 1
+$box-shadow-sm:    0 0.125rem 0.5rem rgba(0, 0, 0, 0.25);    // elevation 1 (no smaller defined)
+$box-shadow-lg:    0 0.25rem 1rem rgba(0, 0, 0, 0.20);       // elevation 2
+$box-shadow-inset: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+
+// -- Tables ---------------------------------------------------------------
+// $ct-table-light-border-color: ct-color-light('border')
+// $ct-table-light-row-even-background-color: ct-color-light('background')
+$table-cell-padding-y: 0.75rem;
+$table-cell-padding-x: 0.75rem;
+$table-border-color:   #5e6a71;  // 'border' — shade(brand2, 60)
+$table-striped-bg:     #e6e9eb;  // 'background' (brand2) for even rows
+
+// -- Text muted -----------------------------------------------------------
+$text-muted: #5a6872;
+
+// -- HR -------------------------------------------------------------------
+$hr-color:   #b2b8bc;  // ≈ 'border-light' — shade(brand2, 25)
+$hr-opacity: 1;
+
+
+// ==========================================================================
+// TIER 3 — MAXIMAL (~100+ variables, comprehensive token parity)
+//
+// Adds: enable flags, grey scale, breakpoints, containers, navbar,
+// breadcrumbs, pagination, badges, alerts, accordions, dropdowns.
+//
+// KNOWN LIMITS — these CANNOT be expressed via Bootstrap SCSS variables:
+//   • Per-component light/dark theming (1047 component variables)
+//   • Responsive typography (mobile→desktop per heading level)
+//   • Negative letter-spacing on headings (post-import CSS required)
+//   • ct-color-shade/tint derivation from 3 brand colours
+//   • Secondary font (Public Sans) assignment to specific elements
+//   • Focus outline-offset: 0 with outline (not box-shadow) pattern
+//   • Stripe highlight accents on cards/accordions/callouts
+// ==========================================================================
+
+// -- Enable/disable flags -------------------------------------------------
+$enable-rounded:          true;
+$enable-shadows:          true;    // CivicTheme uses elevation shadows
+$enable-gradients:        false;   // no gradients in CivicTheme
+$enable-transitions:      true;
+$enable-reduced-motion:   true;
+$enable-negative-margins: true;
+$enable-rfs:              true;    // partial help for responsive headings
+$enable-cssgrid:          false;   // CivicTheme uses flexbox grid
+$enable-validation-icons: true;
+
+// -- Grey scale aligned to CivicTheme neutrals ----------------------------
+// Derived from brand2=#e6e9eb using shade() and tint() at the documented
+// percentages in $ct-colors-default.
+$gray-100: #fafbfb;  // tint(brand2, 90)  → background-light
+$gray-200: #e6e9eb;  // brand2            → background
+$gray-300: #b2b8bc;  // shade(brand2, 25) → border-light
+$gray-400: #8e979d;  // shade(brand2, ~40)
+$gray-500: #5e6a71;  // shade(brand2, 60) → border
+$gray-600: #5a6872;  // muted text
+$gray-700: #3d4a52;  // shade(brand2, ~75)
+$gray-800: #2d3e45;  // body text
+$gray-900: #121313;  // brand3 / near-black
+$black:    #000000;
+$white:    #ffffff;
+
+// -- Extended theme colours -----------------------------------------------
+$theme-colors: (
+  "primary":   $primary,
+  "secondary": #5a6872,   // visible secondary (not brand2)
+  "success":   #008482,
+  "info":      #007cbf,
+  "warning":   #c95100,
+  "danger":    #ce3836,
+  "light":     $gray-100,
+  "dark":      $gray-900,
+);
+
+// -- Transitions ----------------------------------------------------------
+$transition-base:           all 0.25s ease-in-out; // $ct-animation-duration
+$transition-fade:           opacity 0.15s linear;
+$transition-collapse:       height 0.3s ease;
+$transition-collapse-width: width 0.3s ease;
+
+// -- Grid / breakpoints / containers -------------------------------------
+// From $ct-breakpoints. Note xl and xxl differ from Bootstrap defaults.
+$grid-columns:      12;
+$grid-gutter-width: 1.5rem; // 24px — ct-grid-gutters 's' = 3 × 8px
+
+$grid-breakpoints: (
+  xs:  0,
+  sm:  576px,    // 's'
+  md:  768px,    // 'm'
+  lg:  992px,    // 'l'
+  xl:  1280px,   // CivicTheme 'xl' (Bootstrap default: 1200)
+  xxl: 1440px,   // CivicTheme 'xxl' (Bootstrap default: 1400)
+);
+
+// CivicTheme grid offsets at xxl = 96px (12 × 8px) per side.
+// Content width at xxl ≈ 1440 − (96 × 2) = 1248px.
+$container-max-widths: (
+  sm:  540px,
+  md:  720px,
+  lg:  960px,
+  xl:  1184px,   // 1280 − (48 × 2) offset at 'l'/'xl'
+  xxl: 1248px,   // 1440 − (96 × 2) offset at 'xxl'
+);
+
+$container-padding-x: 1.5rem; // 24px — 'xxs'/'xs'/'s'/'m' offset = 24px
+
+// -- Borders --------------------------------------------------------------
+$border-width:  1px;
+$border-style:  solid;
+$border-color:  $gray-300;   // border-light
+$border-color-translucent: rgba(0, 0, 0, 0.12);
+
+$border-radius-xl:  0.75rem;  // 12px
+$border-radius-2xl: 1rem;     // 16px
+$border-radius-pill: 50rem;
+
+// -- Navbar / navigation --------------------------------------------------
+$navbar-padding-y:          0.75rem;
+$navbar-padding-x:          null;
+$navbar-nav-link-padding-x: 1rem;
+$navbar-brand-font-size:    1.25rem;
+$navbar-brand-margin-end:   1.5rem;
+$navbar-toggler-padding-y:  0.375rem;
+$navbar-toggler-padding-x:  0.75rem;
+$navbar-toggler-font-size:  1.125rem;
+$navbar-toggler-border-radius: $border-radius;
+
+// Light navbar — mapped from ct-link-light, ct-navigation-card-light
+$navbar-light-color:          rgba($gray-900, 0.7);
+$navbar-light-hover-color:    $primary;
+$navbar-light-active-color:   $primary;
+$navbar-light-disabled-color: rgba($gray-900, 0.3);
+
+// Dark navbar — mapped from dark theme interaction colours
+$navbar-dark-color:          rgba($white, 0.7);
+$navbar-dark-hover-color:    #61daff;  // dark brand1
+$navbar-dark-active-color:   #61daff;
+$navbar-dark-disabled-color: rgba($white, 0.25);
+
+// -- Nav links ------------------------------------------------------------
+$nav-link-padding-y:    0.625rem;
+$nav-link-padding-x:    1rem;
+$nav-link-font-weight:  500;  // medium
+$nav-link-color:        $primary;
+$nav-link-hover-color:  darken($primary, 10%);
+$nav-link-transition:   color 0.25s ease-in-out,
+                        background-color 0.25s ease-in-out;
+
+// -- Breadcrumbs ----------------------------------------------------------
+// $ct-breadcrumb-light-color: ct-color-light('body')
+// $ct-breadcrumb-light-active-color: same (no differentiation in source)
+$breadcrumb-font-size:       0.875rem;
+$breadcrumb-padding-y:       0.5rem;
+$breadcrumb-padding-x:       0;
+$breadcrumb-item-padding-x:  0.5rem;
+$breadcrumb-margin-bottom:   1.5rem;
+$breadcrumb-bg:              transparent;
+$breadcrumb-divider-color:   $gray-500;
+$breadcrumb-active-color:    $body-color; // same as body (per source)
+$breadcrumb-divider:         quote("/");
+$breadcrumb-border-radius:   0;
+
+// -- Pagination -----------------------------------------------------------
+// From $ct-pagination-* variables (added in newer UIKit).
+// $ct-pagination-light-color: interaction-background → $primary
+// $ct-pagination-light-border-color: border-light → $gray-300
+$pagination-padding-y:          0.5rem;
+$pagination-padding-x:          0.75rem;
+$pagination-font-size:          1rem;
+$pagination-color:              $primary;
+$pagination-bg:                 $white;
+$pagination-border-width:       1px;
+$pagination-border-radius:      $border-radius;
+$pagination-border-color:       $gray-300;
+$pagination-hover-color:        $white;
+$pagination-hover-bg:           $primary;
+$pagination-hover-border-color: $primary;
+$pagination-active-color:       $white;
+$pagination-active-bg:          $primary;
+$pagination-active-border-color: $primary;
+$pagination-disabled-color:     $gray-400;
+
+// -- Badges / Tags --------------------------------------------------------
+// From $ct-tag-* variables. border-width: ct-particle(0.125) = 1px.
+$badge-font-size:     0.875em;
+$badge-font-weight:   600;   // semibold
+$badge-padding-y:     0.35em;
+$badge-padding-x:     0.65em;
+$badge-border-radius: $border-radius;
+
+// -- Alerts ---------------------------------------------------------------
+// CivicTheme alerts use tinted status colours as backgrounds.
+// No border; instead a stripe accent (not expressible via BS vars).
+$alert-padding-y:      1rem;
+$alert-padding-x:      1.25rem;
+$alert-margin-bottom:  1.5rem;
+$alert-border-radius:  $border-radius;
+$alert-border-width:   0;
+$alert-link-font-weight: 600;
+
+// -- Accordions -----------------------------------------------------------
+// From $ct-accordion-* variables.
+$accordion-padding-y:              1rem;     // ct-spacing(3) ÷ 2 approx
+$accordion-padding-x:              1.5rem;   // ct-spacing(3)
+$accordion-color:                  $body-color;
+$accordion-bg:                     #fafbfb;  // background-light
+$accordion-border-color:           $gray-300; // border-light
+$accordion-border-width:           1px;
+$accordion-border-radius:          $border-radius;
+$accordion-button-active-bg:       #fafbfb;  // background-light
+$accordion-button-active-color:    $primary;
+$accordion-icon-color:             $primary;  // ct-accordion-light-icon-color
+$accordion-icon-active-color:      $primary;
+
+// -- Dropdowns ------------------------------------------------------------
+$dropdown-min-width:          12rem;
+$dropdown-padding-x:          0;
+$dropdown-padding-y:          0.5rem;
+$dropdown-font-size:          1rem;
+$dropdown-color:              $body-color;
+$dropdown-bg:                 $white;
+$dropdown-border-color:       transparent;
+$dropdown-border-radius:      $border-radius;
+$dropdown-border-width:       0;
+$dropdown-box-shadow:         $box-shadow-lg; // elevation 2
+$dropdown-link-color:         $body-color;
+$dropdown-link-hover-color:   $primary;
+$dropdown-link-hover-bg:      $gray-100;
+$dropdown-link-active-color:  $white;
+$dropdown-link-active-bg:     $primary;
+$dropdown-item-padding-y:     0.5rem;
+$dropdown-item-padding-x:     1rem;
+
+// -- Aspect ratios --------------------------------------------------------
+$aspect-ratios: (
+  "1x1":  100%,
+  "4x3":  calc(3 / 4 * 100%),
+  "5x3":  calc(3 / 5 * 100%),  // used by ct-event-card-image-aspect-ratio
+  "16x9": calc(9 / 16 * 100%),
+  "21x9": calc(9 / 21 * 100%),
+);
