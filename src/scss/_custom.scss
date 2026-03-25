@@ -7,3 +7,60 @@ body {
   background-color: $primary;
   color: #fff;
 }
+
+
+// -- Dark theme via CSS custom properties ---------------------------------
+// CivicTheme dark brand: brand1=#61daff, brand2=#003a4f, brand3=#00698f
+
+[data-bs-theme="dark"] {
+  --bs-body-bg:        #003a4f;   // dark brand2
+  --bs-body-color:     #d3f3ff;   // ≈ tint(dark brand1, 85)
+  --bs-heading-color:  #f2fcff;   // ≈ tint(dark brand1, 95)
+  --bs-link-color:     #61daff;   // dark brand1
+  --bs-link-hover-color: #90e5ff; // ≈ tint(dark brand1, 40)
+  --bs-primary:        #61daff;
+  --bs-border-color:   #1a6e8a;   // ≈ tint(dark brand2, 10)
+  --bs-focus-ring-color: rgba(139, 92, 215, 0.5); // purple focus
+}
+
+// -- Responsive heading sizes (mobile-first) ------------------------------
+// CivicTheme 'xxs' mobile sizes → Bootstrap desktop sizes at 'm' (768px).
+// These require @media rules because Bootstrap heading vars are single values.
+
+@media (max-width: 767.98px) {
+  h1, .h1 { font-size: 2rem; letter-spacing: -0.6px; }    // 32px
+  h2, .h2 { font-size: 1.75rem; letter-spacing: -0.5px; } // 28px
+  h3, .h3 { font-size: 1.5rem; letter-spacing: -0.35px; } // 24px
+  h4, .h4 { font-size: 1.25rem; letter-spacing: -0.25px; }// 20px
+  h5, .h5 { font-size: 1rem; letter-spacing: 0; }         // 16px
+  h6, .h6 { font-size: 1rem; letter-spacing: 0; }         // 16px
+  .display-1 { font-size: 2rem; letter-spacing: -0.03px; }
+}
+
+
+// Civic Theme letter spacing
+// Values from $ct-typography-default desktop ('m') tuples.
+
+h1, .h1, .display-1, .display-2 {
+  letter-spacing: -1px;    // heading-1 'm': -1px, display 'm': -1px
+}
+h2, .h2, .display-3 {
+  letter-spacing: -0.8px;  // heading-2 'm': -0.8px (NOT -0.6px)
+}
+h3, .h3, .display-4 {
+  letter-spacing: -0.6px;  // heading-3 'm': -0.6px
+}
+h4, .h4, .display-5 {
+  letter-spacing: -0.4px;  // heading-4 'm': -0.4px
+}
+h5, .h5, .display-6 {
+  letter-spacing: -0.2px;  // heading-5 'm': -0.2px
+}
+
+// CivicTheme defines a 'secondary' font (Public Sans) but no component
+// variables reference it in the default kit. If your implementation uses it:
+
+// .ct-secondary-font,
+// [data-font="secondary"] {
+//   font-family: "Public Sans", sans-serif;
+// }

@@ -1,8 +1,38 @@
 // src/scss/_variables.scss
 
-
 // Typography
 $font-family-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+$font-family-base:       $font-family-sans-serif;
 
-// Border radius
-$border-radius: 0.25rem;
+// Alternatively, specify a Webfont
+// @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+// $font-family-sans-serif: "Inter", sans-serif;
+
+
+// -- Theme colours -------------------------------------------
+// CivicTheme light-theme brand colours mapped to Bootstrap
+$primary:   #00698f;  // brand1 — teal
+$secondary: #e6e9eb;  // brand2 — cool grey
+$dark:      #121313;  // brand3 — near-black
+$light:     #fafbfb;  // background-light (tint of brand2)
+$success:   #008a00;
+$danger:    #cc2936;
+$warning:   #b85c00;
+$info:      #00698f;
+
+$body-bg:    #ffffff;
+$body-color: #2d3e45;  // derived body-text colour
+
+// -- Links ---------------------------------------------------
+$link-color:      $primary;
+$link-decoration: underline;
+
+// -- Border radius -------------------------------------------
+// CivicTheme uses subtle rounding aligned to its 4 px grid
+$border-radius:    0.25rem;  // 4 px
+$border-radius-sm: 0.125rem; // 2 px
+$border-radius-lg: 0.5rem;   // 8 px
+
+// -- Headings ------------------------------------------------
+$headings-font-weight: 700;
+$headings-color:       #002a39;  // derived heading colour
