@@ -3,10 +3,10 @@
   "private": true,
   "homepage": "JamesFehon-DTA.github.io/bootstrap-prototyping-kit",
   "scripts": {
-    "build:css": "sass src/scss/main.scss docs/css/main.css --style=expanded",
+    "build:css": "mkdir -p docs/css && sass src/scss/main.scss docs/css/main.css --style=expanded",
     "watch:css": "sass --watch src/scss/main.scss:docs/css/main.css",
     "copy:html": "cp src/html/index.html docs/index.html",
-    "copy:js": "cp src/js/main.js docs/js/main.js",
+    "copy:js": "mkdir -p docs/js && cp src/js/main.js docs/js/main.js",
     "build": "npm run build:css && npm run copy:html && npm run copy:js"
   },
   "devDependencies": {
