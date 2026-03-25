@@ -1,0 +1,15 @@
+{
+  "name": "html-bootstrap-5.2-sass-starter",
+  "private": true,
+  "scripts": {
+    "build:css": "sass src/scss/main.scss docs/css/main.css --style=expanded",
+    "watch:css": "sass --watch src/scss/main.scss:docs/css/main.css",
+    "copy:html": "cp src/html/index.html docs/index.html",
+    "copy:js": "cp src/js/main.js docs/js/main.js",
+    "build": "npm run build:css && npm run copy:html && npm run copy:js"
+  },
+  "devDependencies": {
+    "bootstrap": "5.2.3",
+    "sass": "^1.69.0"
+  }
+}
