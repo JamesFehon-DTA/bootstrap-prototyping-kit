@@ -11,16 +11,15 @@
 @import "../../node_modules/bootstrap/scss/mixins";
 @import "../../node_modules/bootstrap/scss/root";
 
-// Optionally included parts
-
-@import "../../node_modules/bootstrap/scss/utilities";
-@import "../../node_modules/bootstrap/scss/reboot";
-@import "../../node_modules/bootstrap/scss/type";
-@import "../../node_modules/bootstrap/scss/images";
-@import "../../node_modules/bootstrap/scss/containers";
-@import "../../node_modules/bootstrap/scss/grid";
-@import "../../node_modules/bootstrap/scss/helpers";
-// @import "../../node_modules/bootstrap/scss/bootstrap";
+// Optionally included only certain parts, or include full bootstrap base
+// @import "../../node_modules/bootstrap/scss/utilities";
+// @import "../../node_modules/bootstrap/scss/reboot";
+// @import "../../node_modules/bootstrap/scss/type";
+// @import "../../node_modules/bootstrap/scss/images";
+// @import "../../node_modules/bootstrap/scss/containers";
+// @import "../../node_modules/bootstrap/scss/grid";
+// @import "../../node_modules/bootstrap/scss/helpers";
+@import "../../node_modules/bootstrap/scss/bootstrap";
 
 
 // Optional include of utilities API last to generate classes based on the Sass map in `_utilities.scss`
