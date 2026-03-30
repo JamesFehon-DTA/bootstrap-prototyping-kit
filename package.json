@@ -5,8 +5,9 @@
   "scripts": {
     "build:css": "mkdir -p docs/css && sass src/scss/main.scss docs/css/main.css --style=expanded",
     "watch:css": "sass --watch src/scss/main.scss:docs/css/main.css",
-    "copy:html": "cp src/html/index.html docs/index.html",
-    "copy:js": "mkdir -p docs/js && cp src/js/main.js docs/js/main.js",
+    "copy:html": "mkdir -p docs && cp -r src/html/. docs",
+    "//copy:html": "cp src/html/index.html docs/index.html",
+    "copy:js": "mkdir -p docs/js && cp -r src/js/. docs/js",
     "build": "npm run build:css && npm run copy:html && npm run copy:js"
   },
   "devDependencies": {
